@@ -9,7 +9,7 @@
 
 #### iOS
 1. Naviage to ios folder and add podfile 
-	`pod 'CocoaMQTT', '~>1.0.11'`
+`pod 'CocoaMQTT', '~>1.0.11'`
 1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
 2. Go to `node_modules` ➜ `react-native-estimote-wrapper` and add `RNEstimoteWrapper.xcodeproj`
 3. In XCode, in the project navigator, select your root project. Add `libRNEstimoteWrapper.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
