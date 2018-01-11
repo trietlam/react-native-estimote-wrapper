@@ -8,12 +8,12 @@
 ### Manual installation
 
 #### iOS
-1. Naviage to ios folder and add podfile 
-`pod 'CocoaMQTT', '~>1.0.11'`
-1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-2. Go to `node_modules` ➜ `react-native-estimote-wrapper` and add `RNEstimoteWrapper.xcodeproj`
-3. In XCode, in the project navigator, select your root project. Add `libRNEstimoteWrapper.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
-4. Build (`Cmd+B`) or Run your project (`Cmd+R`)<
+1. Naviage to ios folder, add podfile and install pod
+	`pod 'EstimoteSDK','~>4.26.3'`
+2. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
+3. Go to `node_modules` ➜ `react-native-estimote-wrapper` and add `RNEstimoteWrapper.xcodeproj`
+4. In XCode, in the project navigator, select your root project. Add `libRNEstimoteWrapper.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
+5. Build (`Cmd+B`) or Run your project (`Cmd+R`)<
 
 #### Android
 
@@ -23,7 +23,7 @@
 2. Append the following lines to `android/settings.gradle`:
   	```
   	include ':react-native-estimote-wrapper'
-  	project(':react-native-estimote-wrapper').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-estimote-wrapper/android')
+  	project(':react-native-estimote-wrapper').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-estimote-wrapper/android')
   	```
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
   	```
@@ -35,9 +35,12 @@
 
 ## Usage
 ```javascript
-import RNEstimoteWrapper from 'react-native-estimote-wrapper';
+import { NativeEventEmitter, Platform } from 'react-native';
+import RNBeaconManager from 'react-native-estimote-wrapper';
+
+const RNBeaconEmitter = new NativeEventEmitter(RNEstimoteBeaconManager);
 
 // TODO: What to do with the module?
-RNEstimoteWrapper;
+RNBeaconManager;
 ```
   

@@ -42,7 +42,7 @@ public class RNEstimoteWrapperModule extends ReactContextBaseJavaModule {
 
   @Override
   public String getName() {
-    return "RNEstimoteWrapper";
+    return "RNEstimoteBeaconManager";
   }
 
   @ReactMethod
@@ -94,7 +94,7 @@ public class RNEstimoteWrapperModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void registerForTelemetryListener(String appId, String appToken){
+  public void configureTelemetryListener(String appId, String appToken){
     SystemRequirementsChecker.checkWithDefaultDialogs(getCurrentActivity());
     EstimoteSDK.initialize(reactContext, appId, appToken);
 

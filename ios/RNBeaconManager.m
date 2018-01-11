@@ -2,25 +2,19 @@
 //  RNBeaconManager.m
 //  RNEstimote
 //
-//  Created by Admin on 19/12/17.
-//  Copyright © 2017 Admin. All rights reserved.
+//  Created by lhmt on 19/12/17.
+//  Copyright © 2017 lhmt. All rights reserved.
 //
 
 #import "RNBeaconManager.h"
 #import "EstimoteSDK/EstimoteSDK.h"
 #import <React/RCTConvert.h>
-
-@interface RNBeaconManager() <ESTBeaconManagerDelegate>
-
-@property (nonatomic) ESTBeaconManager *beaconManager;
-@property (nonatomic) CLBeaconRegion *beaconRegion;
-
-@end
+#import "RNBeaconManagerExtension.h"
 
 static NSString * const BEACON_DID_RANGE = @"BEACON_DID_RANGE";
 
 @implementation RNBeaconManager
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNEstimoteBeaconManager)
 
 - (NSArray<NSString *> *)supportedEvents
 {
@@ -28,11 +22,19 @@ RCT_EXPORT_MODULE()
 }
 
 -(instancetype)init{
-    self = [super init];
-    
-    self.beaconManager = [ESTBeaconManager new];
-    self.beaconManager.delegate = self;
-    
+
+    if (self = [super init]) {
+        self = [super init];
+        
+        self.beaconManager = [ESTBeaconManager new];
+        self.beaconManager.delegate = self;
+        
+        self.locationManager = [[CLLocationManager alloc] init];
+        
+        self.locationManager.delegate = self;
+        self.locationManager.pausesLocationUpdatesAutomatically = NO;
+        self.dropEmptyRanges = NO;
+    }
     return self;
 }
 
@@ -54,9 +56,11 @@ RCT_EXPORT_METHOD(startMonitoringForRegion:(NSDictionary *) dict)
     [self.beaconManager startMonitoringForRegion:[self convertDictToBeaconRegion:dict]];
 }
 
-RCT_EXPORT_METHOD(startRangingBeaconsInRegion:(NSDictionary *) dict)
+RCT_EXPORT_METHOD(startEstimoteRangingBeaconsInRegion:(NSDictionary *) dict)
 {
-    [self.beaconManager startRangingBeaconsInRegion:[self convertDictToBeaconRegion:dict]];
+    NSLog(@"Start Ranging");
+    CLBeaconRegion *region = [self convertDictToBeaconRegion:dict];
+    [self.beaconManager startRangingBeaconsInRegion:region];
 }
 
 RCT_EXPORT_METHOD(stopMonitoringForRegion:(NSDictionary *) dict)
@@ -90,19 +94,20 @@ RCT_EXPORT_METHOD(stopRangingBeaconsInRegion:(NSDictionary *) dict)
     }
 }
 
+// Use CLLocation iBeacon ranging because Estimote Beacon is not reliable with RN
+RCT_EXPORT_METHOD(startRangingBeaconsInRegion:(NSDictionary *) dict)
+{
+    [self.locationManager startRangingBeaconsInRegion:[self convertDictToBeaconRegion:dict]];
+}
+
 - (void)beaconManager:(id)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region {
     int count = (int)beacons.count;
+    NSLog(@"Did range beacon");
     for (int i=0;i<count;i++){
         CLBeacon *beacon = beacons[i];
-        //NSLog(@"%@",beacon);
+        NSLog(@"%@",beacon);
     }
     [self sendEventWithName:BEACON_DID_RANGE body:beacons];
-    //    CLBeacon *nearestBeacon = beacons.firstObject;
-    //    if (nearestBeacon) {
-    //        NSArray *places = [self placesNearBeacon:nearestBeacon];
-    //        // TODO: update the UI here
-    //        NSLog(@"%@", places); // TODO: remove after implementing the UI
-    //    }
 }
 
 - (void)beaconManager:(id)manager didEnterRegion:(CLBeaconRegion *)region{
@@ -115,6 +120,47 @@ RCT_EXPORT_METHOD(stopRangingBeaconsInRegion:(NSDictionary *) dict)
 
 -(void)beaconManager:(id)manager didFailWithError:(NSError *)error{
     
+}
+
+-(NSString *)stringForProximity:(CLProximity)proximity {
+    switch (proximity) {
+        case CLProximityUnknown:    return @"unknown";
+        case CLProximityFar:        return @"far";
+        case CLProximityNear:       return @"near";
+        case CLProximityImmediate:  return @"immediate";
+        default:                    return @"";
+    }
+}
+
+-(void) locationManager:(CLLocationManager *)manager didRangeBeacons:
+(NSArray *)beacons inRegion:(CLBeaconRegion *)region
+{
+    if (self.dropEmptyRanges && beacons.count == 0) {
+        return;
+    }
+    NSMutableArray *beaconArray = [[NSMutableArray alloc] init];
+    
+    for (CLBeacon *beacon in beacons) {
+        [beaconArray addObject:@{
+                                 @"uuid": [beacon.proximityUUID UUIDString],
+                                 @"major": beacon.major,
+                                 @"minor": beacon.minor,
+                                 
+                                 @"rssi": [NSNumber numberWithLong:beacon.rssi],
+                                 @"proximity": [self stringForProximity: beacon.proximity],
+                                 @"accuracy": [NSNumber numberWithDouble: beacon.accuracy]
+                                 }];
+    }
+    
+    NSDictionary *event = @{
+                            @"region": @{
+                                    @"identifier": region.identifier,
+                                    @"uuid": [region.proximityUUID UUIDString],
+                                    },
+                            @"beacons": beaconArray
+                            };
+    NSLog(@"BeaconDidRange: %@",beacons);
+    [self sendEventWithName:BEACON_DID_RANGE body:event];
 }
 @end
 

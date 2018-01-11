@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		8445C4FD1FEB3F990031322C /* RNBeaconManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8445C4FC1FEB3F990031322C /* RNBeaconManager.m */; };
-		8445C5001FEB49B00031322C /* RNDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8445C4FF1FEB49B00031322C /* RNDeviceManager.m */; };
 		8445C5031FEB49C10031322C /* RNNearableManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8445C5021FEB49C10031322C /* RNNearableManager.m */; };
+		84A1DAB82006F33A007D44E6 /* RNBeaconManager+DeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1DAB72006F33A007D44E6 /* RNBeaconManager+DeviceManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,10 +28,11 @@
 		134814201AA4EA6300B7C361 /* libRNEstimoteWrapper.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNEstimoteWrapper.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8445C4FB1FEB3F990031322C /* RNBeaconManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNBeaconManager.h; sourceTree = "<group>"; };
 		8445C4FC1FEB3F990031322C /* RNBeaconManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNBeaconManager.m; sourceTree = "<group>"; };
-		8445C4FE1FEB49B00031322C /* RNDeviceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNDeviceManager.h; sourceTree = "<group>"; };
-		8445C4FF1FEB49B00031322C /* RNDeviceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNDeviceManager.m; sourceTree = "<group>"; };
 		8445C5011FEB49C10031322C /* RNNearableManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNNearableManager.h; sourceTree = "<group>"; };
 		8445C5021FEB49C10031322C /* RNNearableManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNNearableManager.m; sourceTree = "<group>"; };
+		846F08902008126800BB61F3 /* RNBeaconManagerExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNBeaconManagerExtension.h; sourceTree = "<group>"; };
+		84A1DAB62006F33A007D44E6 /* RNBeaconManager+DeviceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RNBeaconManager+DeviceManager.h"; sourceTree = "<group>"; };
+		84A1DAB72006F33A007D44E6 /* RNBeaconManager+DeviceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RNBeaconManager+DeviceManager.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,10 +57,11 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				846F08902008126800BB61F3 /* RNBeaconManagerExtension.h */,
+				84A1DAB62006F33A007D44E6 /* RNBeaconManager+DeviceManager.h */,
+				84A1DAB72006F33A007D44E6 /* RNBeaconManager+DeviceManager.m */,
 				8445C5011FEB49C10031322C /* RNNearableManager.h */,
 				8445C5021FEB49C10031322C /* RNNearableManager.m */,
-				8445C4FE1FEB49B00031322C /* RNDeviceManager.h */,
-				8445C4FF1FEB49B00031322C /* RNDeviceManager.m */,
 				8445C4FB1FEB3F990031322C /* RNBeaconManager.h */,
 				8445C4FC1FEB3F990031322C /* RNBeaconManager.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
@@ -123,8 +125,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8445C4FD1FEB3F990031322C /* RNBeaconManager.m in Sources */,
-				8445C5001FEB49B00031322C /* RNDeviceManager.m in Sources */,
 				8445C5031FEB49C10031322C /* RNNearableManager.m in Sources */,
+				84A1DAB82006F33A007D44E6 /* RNBeaconManager+DeviceManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
