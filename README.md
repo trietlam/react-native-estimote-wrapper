@@ -5,23 +5,19 @@
 
 `$ npm install react-native-estimote-wrapper --save`
 
-### Mostly automatic installation
-
-`$ react-native link react-native-estimote-wrapper`
-
 ### Manual installation
 
-
 #### iOS
-
+1. Naviage to ios folder and add podfile 
+	`pod 'CocoaMQTT', '~>1.0.11'`
 1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
 2. Go to `node_modules` ➜ `react-native-estimote-wrapper` and add `RNEstimoteWrapper.xcodeproj`
-3. In XCode, in the project navigator, select your project. Add `libRNEstimoteWrapper.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
-4. Run your project (`Cmd+R`)<
+3. In XCode, in the project navigator, select your root project. Add `libRNEstimoteWrapper.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
+4. Build (`Cmd+B`) or Run your project (`Cmd+R`)<
 
 #### Android
 
-1. Open up `android/app/src/main/java/[...]/MainActivity.java`
+1. Open up `android/app/src/main/java/[...]/MainApplication.java`
   - Add `import com.reactlibrary.RNEstimoteWrapperPackage;` to the imports at the top of the file
   - Add `new RNEstimoteWrapperPackage()` to the list returned by the `getPackages()` method
 2. Append the following lines to `android/settings.gradle`:
@@ -35,13 +31,7 @@
   	```
 
 #### Windows
-[Read it! :D](https://github.com/ReactWindows/react-native)
-
-1. In Visual Studio add the `RNEstimoteWrapper.sln` in `node_modules/react-native-estimote-wrapper/windows/RNEstimoteWrapper.sln` folder to their solution, reference from their app.
-2. Open up your `MainPage.cs` app
-  - Add `using Estimote.Wrapper.RNEstimoteWrapper;` to the usings at the top of the file
-  - Add `new RNEstimoteWrapperPackage()` to the `List<IReactPackage>` returned by the `Packages` method
-
+[Not supported :D](https://github.com/ReactWindows/react-native)
 
 ## Usage
 ```javascript

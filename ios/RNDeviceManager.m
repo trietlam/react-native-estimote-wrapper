@@ -20,6 +20,9 @@
 
 static NSString * const TELEMETRY_RECEIVED = @"TELEMETRY_RECEIVED";
 static NSString * const DEVICE_DISCOVERED = @"DEVICE_DISCOVERED";
+ESTTelemetryNotificationTemperature *temperatureNotification;
+ESTTelemetryNotificationAmbientLight *lightNotification;
+ESTTelemetryNotificationSystemStatus *systemNotification;
 
 @implementation RNDeviceManager
 RCT_EXPORT_MODULE()
@@ -30,11 +33,10 @@ RCT_EXPORT_MODULE()
 }
 
 -(instancetype)init{
-    self = [super init];
-    
-    self.deviceManager = [ESTDeviceManager new];
-    self.deviceManager.delegate = self;
-    
+    if(self = [super init]){
+        self.deviceManager = [ESTDeviceManager new];
+        self.deviceManager.delegate = self;
+    }
     return self;
 }
 
@@ -45,7 +47,7 @@ RCT_EXPORT_MODULE()
     }
 }
 
-RCT_EXPORT_METHOD(startDiscoverDevices){
+RCT_EXPORT_METHOD(startDeviceDiscovery){
     //replace init with initWithIdentifier if required
     //ESTDeviceFilterLocationBeacon *filter = [[ESTDeviceFilterLocationBeacon alloc] initWithIdentifier:@"d4e2077dd7d7668ea44a421a9b333738"];
     ESTDeviceFilterLocationBeacon *filter = [[ESTDeviceFilterLocationBeacon alloc] init];
@@ -57,7 +59,7 @@ RCT_EXPORT_METHOD(startDiscoverDevices){
 //    [self.deviceManager unregisterForTelemetryNotification];
 //}
 
-RCT_EXPORT_METHOD(registerForTelemetryNotifications){
+RCT_EXPORT_METHOD(registerForTelemetryListener){
     void (^tempTelemetryBlock)(ESTTelemetryInfoTemperature*) = ^(ESTTelemetryInfoTemperature *tempInfo){
         NSLog(@"Temperature");
         [self sendEventWithName:TELEMETRY_RECEIVED body:@{@"shortId": tempInfo.shortIdentifier, @"temperature":tempInfo.temperatureInCelsius}];
@@ -75,16 +77,17 @@ RCT_EXPORT_METHOD(registerForTelemetryNotifications){
         [self sendEventWithName:TELEMETRY_RECEIVED body:@{@"shortId": systemInfo.shortIdentifier, @"uptime":systemInfo.uptimeInSeconds}];
     };
     
-    ESTTelemetryNotificationTemperature *temperatureNotification = [[ESTTelemetryNotificationTemperature alloc] initWithNotificationBlock: tempTelemetryBlock];
+    self.temperatureNotification = [[ESTTelemetryNotificationTemperature alloc] initWithNotificationBlock: tempTelemetryBlock];
     
-    ESTTelemetryNotificationAmbientLight *lightNotification = [[ESTTelemetryNotificationAmbientLight alloc] initWithNotificationBlock:lightTelemetryBlock];
+    self.lightNotification = [[ESTTelemetryNotificationAmbientLight alloc] initWithNotificationBlock:lightTelemetryBlock];
     
-    ESTTelemetryNotificationSystemStatus *systemNotification = [[ESTTelemetryNotificationSystemStatus alloc]initWithNotificationBlock:systemTelemetryBlock];
-    
-    [self.deviceManager registerForTelemetryNotifications:(NSArray<ESTTelemetryNotificationProtocol>*)@[temperatureNotification,lightNotification, systemNotification]];
-    
+    self.systemNotification = [[ESTTelemetryNotificationSystemStatus alloc]initWithNotificationBlock:systemTelemetryBlock];
 }
 
+RCT_EXPORT_METHOD(startRangingAndTelemetryListening){
+    [self.deviceManager registerForTelemetryNotifications:(NSArray<ESTTelemetryNotificationProtocol>*)@[self.temperatureNotification,self.lightNotification, self.systemNotification]];
+    
+}
 
 @end
 
